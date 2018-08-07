@@ -9,6 +9,7 @@
 import Foundation
 
 class SearchResultController {
+    
     let baseURL: URL = URL(string: "https://itunes.apple.com/search")!
     
     var searchResults: [SearchResult] = []
@@ -20,6 +21,37 @@ class SearchResultController {
         case delete = "DELETE"
     }
     
+    func performSearch(searchTerm: String, resultType: ResultType, completion: @escaping (NSError?) -> Void ) {
+        var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)
+        let searchQueryURL = URLQueryItem(name: "term", value: searchTerm)
+        urlComponents?.queryItems = [searchQueryURL]
+        
+        guard let requestURL = urlComponents?.url else { return }
+        
+        let dataTask = URLSession.shared.dataTask(with: requestURL) { (data, _, error) in
+            if let error = error {
+                NSLog("Error fetching data: \(error)")
+                completion(NSError())
+            }
+            guard let data = data else {
+                NSLog("Error fetching data: \(error)")
+                completion(NSError())
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                let decodedSearchResults = try decoder.decode(SearchResults.self, from: data)
+                self.searchResults = decodedSearchResults.results
+                completion(nil)
+            } catch {
+                NSLog("Unable to encode.")
+                completion(NSError())
+            }
+        }
+        dataTask.resume()
+    }
+    
+    /*
     func performSearch(searchTerm: String, resultType: ResultType, completion: @escaping (NSError?) -> Void) {
         var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)!
         let searchQueryItem = URLQueryItem(name: "term", value: searchTerm)
@@ -60,4 +92,5 @@ class SearchResultController {
         }
         dataTask.resume()
     }
+    */
 }
