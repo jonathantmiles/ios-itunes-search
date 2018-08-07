@@ -62,12 +62,12 @@
 			children = (
 				F8F90C84211A290E003EFDA9 /* AppDelegate.swift */,
 				F8F90C88211A290E003EFDA9 /* Main.storyboard */,
-				F8730FF2211A415F0057535C /* SearchResultsTableViewController.swift */,
 				F8F90C8B211A290E003EFDA9 /* Assets.xcassets */,
 				F8F90C8D211A290E003EFDA9 /* LaunchScreen.storyboard */,
 				F8F90C90211A290E003EFDA9 /* Info.plist */,
 				F8730FEC211A2BE40057535C /* SearchResult.swift */,
 				F8730FEE211A2EAE0057535C /* ResultType.swift */,
+				F8730FF2211A415F0057535C /* SearchResultsTableViewController.swift */,
 				F8730FF0211A2F6B0057535C /* SearchResultController.swift */,
 			);
 			path = "iTunes Search";

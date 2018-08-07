@@ -20,14 +20,14 @@ class SearchResultController {
         case delete = "DELETE"
     }
     
-    func performSearch(searchTerm: String, resultType: ResultType, completion: @escaping ([SearchResult]?, NSError?) -> Void) {
+    func performSearch(searchTerm: String, resultType: ResultType, completion: @escaping (NSError?) -> Void) {
         var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)!
         let searchQueryItem = URLQueryItem(name: "term", value: searchTerm)
         urlComponents.queryItems = [searchQueryItem]
         
         guard let requestURL = urlComponents.url else {
             NSLog("Problem constructing search URL for \(searchTerm)")
-            completion(nil, NSError())
+            completion(NSError())
             return
         }
         
@@ -38,23 +38,23 @@ class SearchResultController {
             
             if let error = error {
                 NSLog("Error fetching data: \(error)")
-                completion(nil, NSError())
+                completion(NSError())
             }
             guard let data = data else {
                 NSLog("Error fetching data. No data returned.")
-                completion(nil, NSError())
+                completion(NSError())
                 return
             }
             
             do {
                 let jsonDecoder = JSONDecoder()
-                jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+                //jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
                 let theseSearchResults = try jsonDecoder.decode(SearchResults.self, from: data)
-                let results = theseSearchResults.results
-                completion(results, nil)
+                self.searchResults = theseSearchResults.results
+                completion(nil)
             } catch {
                 NSLog("Unable to encode")
-                completion(nil, NSError())
+                completion(NSError())
                 return
             }
         }
