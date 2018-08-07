@@ -27,8 +27,9 @@ class SearchResultsTableViewController: UITableViewController, UISearchBarDelega
         case 2:
             resultType = .movie
         default:
-            resultType = .software
+            break
         }
+        
         searchResultsController.performSearch(searchTerm: searchTerm, resultType: resultType) { (error) in
             if error != nil {
                 NSLog("Error performing search function: \(String(describing: error)).")

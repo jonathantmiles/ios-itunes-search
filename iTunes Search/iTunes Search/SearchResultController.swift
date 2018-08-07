@@ -24,7 +24,8 @@ class SearchResultController {
     func performSearch(searchTerm: String, resultType: ResultType, completion: @escaping (NSError?) -> Void ) {
         var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)
         let searchQueryURL = URLQueryItem(name: "term", value: searchTerm)
-        urlComponents?.queryItems = [searchQueryURL]
+        let entityQueryURL = URLQueryItem(name: "entity", value: resultType.rawValue)
+        urlComponents?.queryItems = [searchQueryURL, entityQueryURL]
         
         guard let requestURL = urlComponents?.url else { return }
         
@@ -41,6 +42,7 @@ class SearchResultController {
             do {
                 let decoder = JSONDecoder()
                 let decodedSearchResults = try decoder.decode(SearchResults.self, from: data)
+                //let filteredSearchResults = decodedSearchResults.results.filter( {($0.type?.contains(resultType.rawValue))! } )
                 self.searchResults = decodedSearchResults.results
                 completion(nil)
             } catch {
